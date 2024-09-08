@@ -1,23 +1,33 @@
-const btn = document.querySelector(".btn");
+// fetch is built-in
+const btn = document.querySelector(".button-json");
+const url = "../api/people.json";
 
-// xml
-btn.addEventListener("click", () => {
-  getData();
+btn.addEventListener("click", async () => {
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    displayItems(data);
+  } catch (err) {
+    console.log(err);
+  }
 });
 
-function getData() {
-  const xhr = new XMLHttpRequest();
-  console.log(xhr);
+const displayItems = (items) => {
+  const displayData = items
+    .map((item) => {
+      const { name } = item;
+      return `<p>${name}</p>`;
+    })
+    .join("");
+  const element = document.createElement("div");
+  element.innerHTML = displayData;
+  document.body.appendChild(element);
+};
 
-  xhr.open("GET", "../api/sample.txt");
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      const text = document.createElement("p");
-      text.textContent = xhr.responseText;
-      document.body.appendChild(text);
-    } else {
-      console.log({ status: xhr.status, text: xhr.statusText });
-    }
-  };
-  xhr.send();
-}
+// catch the error
+// try {
+//   console.log("hello");
+//   console.log(random);
+// } catch (error) {
+//   console.log(erroe);
+// }
